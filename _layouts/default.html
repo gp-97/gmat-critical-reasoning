@@ -7,7 +7,7 @@
 
 {% seo %}
     <link rel="stylesheet" href="{{ '/assets/css/style.css?v=' | append: site.github.build_revision | relative_url }}">
-    <!-- Apply stored or system theme immediately to prevent flash -->
+    <!-- Apply stored or system theme + sidebar state immediately to prevent flash -->
     <script>
       (function() {
         var saved = localStorage.getItem('theme');
@@ -15,6 +15,9 @@
           document.documentElement.setAttribute('data-theme', saved);
         } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
           document.documentElement.setAttribute('data-theme', 'dark');
+        }
+        if (localStorage.getItem('sidebar-collapsed') === 'true') {
+          document.documentElement.classList.add('sidebar-collapsed');
         }
       })();
     </script>
@@ -70,43 +73,95 @@
         });
       })();
 
-      // Sidebar toggle
+      // Unified sidebar logic: collapse (all sizes) + overlay (narrow screens)
       (function() {
-        var toggle = document.getElementById('sidebar-toggle');
+        var html = document.documentElement;
+        var body = document.body;
         var sidebar = document.getElementById('sidebar');
         var overlay = document.getElementById('sidebar-overlay');
+        var hamburger = document.getElementById('sidebar-toggle');
+        var collapseBtn = document.getElementById('sidebar-collapse-btn');
+        var isNarrow = function() { return window.innerWidth <= 768; };
 
-        function openSidebar() {
-          sidebar.classList.add('open');
-          overlay.classList.add('visible');
-          document.body.classList.add('sidebar-open');
+        function collapse() {
+          html.classList.add('sidebar-collapsed');
+          localStorage.setItem('sidebar-collapsed', 'true');
         }
 
-        function closeSidebar() {
+        function expand() {
+          html.classList.remove('sidebar-collapsed');
+          localStorage.setItem('sidebar-collapsed', 'false');
+          // On narrow screens, also open as overlay
+          if (isNarrow()) {
+            sidebar.classList.add('open');
+            overlay.classList.add('visible');
+            body.classList.add('sidebar-open');
+          }
+        }
+
+        function toggleCollapse() {
+          if (html.classList.contains('sidebar-collapsed')) {
+            expand();
+          } else {
+            collapse();
+          }
+        }
+
+        function closeOverlay() {
           sidebar.classList.remove('open');
           overlay.classList.remove('visible');
-          document.body.classList.remove('sidebar-open');
+          body.classList.remove('sidebar-open');
         }
 
-        toggle.addEventListener('click', function() {
-          if (sidebar.classList.contains('open')) {
-            closeSidebar();
+        function openOverlay() {
+          sidebar.classList.add('open');
+          overlay.classList.add('visible');
+          body.classList.add('sidebar-open');
+        }
+
+        // Collapse button on sidebar
+        if (collapseBtn) {
+          collapseBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            toggleCollapse();
+          });
+        }
+
+        // Hamburger: on narrow screens toggles overlay; on wide screens toggles collapse
+        hamburger.addEventListener('click', function() {
+          if (isNarrow()) {
+            if (sidebar.classList.contains('open')) {
+              closeOverlay();
+            } else {
+              // Expand from collapsed state before opening overlay
+              if (html.classList.contains('sidebar-collapsed')) {
+                expand();
+              } else {
+                openOverlay();
+              }
+            }
           } else {
-            openSidebar();
+            toggleCollapse();
           }
         });
 
-        overlay.addEventListener('click', closeSidebar);
+        overlay.addEventListener('click', closeOverlay);
 
-        // Close sidebar on Escape key
         document.addEventListener('keydown', function(e) {
-          if (e.key === 'Escape') closeSidebar();
+          if (e.key === 'Escape') closeOverlay();
         });
 
-        // Close sidebar when a link is clicked (mobile nav)
+        // Close overlay when a link is clicked on narrow screens
         sidebar.addEventListener('click', function(e) {
-          if (e.target.tagName === 'A' && window.innerWidth < 768) {
-            closeSidebar();
+          if (e.target.tagName === 'A' && isNarrow()) {
+            closeOverlay();
+          }
+        });
+
+        // On window resize, handle transition between narrow/wide
+        window.addEventListener('resize', function() {
+          if (!isNarrow()) {
+            closeOverlay();
           }
         });
       })();

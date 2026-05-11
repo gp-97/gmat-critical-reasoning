@@ -23,6 +23,7 @@ body, .page-header, .main-content, .site-footer, a, code, pre, table, blockquote
   padding: 2rem 3rem;
   max-width: none;
   margin: 0;
+  transition: margin-left 0.25s ease;
 }
 
 /* ===== Sidebar ===== */
@@ -33,11 +34,13 @@ body, .page-header, .main-content, .site-footer, a, code, pre, table, blockquote
   top: 0;
   height: 100vh;
   overflow-y: auto;
+  overflow-x: hidden;
   border-right: 1px solid #eff0f1;
   background-color: #fafbfc;
-  padding: 1.5rem 0;
+  padding: 0;
   z-index: 5;
   scrollbar-width: thin;
+  transition: width 0.25s ease, min-width 0.25s ease, padding 0.25s ease;
 }
 
 .sidebar::-webkit-scrollbar {
@@ -49,7 +52,55 @@ body, .page-header, .main-content, .site-footer, a, code, pre, table, blockquote
   border-radius: 2px;
 }
 
-/* Sidebar Toggle Button (mobile) */
+/* ===== Sidebar Collapse Button ===== */
+.sidebar-collapse-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 32px;
+  border: none;
+  border-bottom: 1px solid #e9ebec;
+  background: transparent;
+  cursor: pointer;
+  color: #656d76;
+  font-size: 12px;
+  padding: 0;
+  transition: color 0.15s, background-color 0.15s;
+  flex-shrink: 0;
+}
+
+.sidebar-collapse-btn:hover {
+  background-color: #eaeef2;
+  color: #24292f;
+}
+
+.collapse-icon {
+  display: inline-block;
+  transition: transform 0.25s ease;
+}
+
+/* ===== Collapsed Sidebar ===== */
+html.sidebar-collapsed .sidebar {
+  width: 0;
+  min-width: 0;
+  overflow: hidden;
+  border-right: none;
+}
+
+html.sidebar-collapsed .sidebar-collapse-btn {
+  border-bottom: none;
+}
+
+html.sidebar-collapsed .collapse-icon {
+  transform: rotate(180deg);
+}
+
+html.sidebar-collapsed .main-content {
+  flex: 1;
+}
+
+/* ===== Sidebar Toggle Button (hamburger, in header) ===== */
 .sidebar-toggle {
   display: none;
   position: absolute;
@@ -74,7 +125,7 @@ body, .page-header, .main-content, .site-footer, a, code, pre, table, blockquote
   border-color: rgba(255, 255, 255, 0.5);
 }
 
-/* Sidebar overlay (mobile) */
+/* Sidebar overlay (narrow screens) */
 .sidebar-overlay {
   display: none;
   position: fixed;
@@ -91,6 +142,10 @@ body, .page-header, .main-content, .site-footer, a, code, pre, table, blockquote
 }
 
 /* ===== Sidebar Navigation ===== */
+.sidebar-nav {
+  padding: 1rem 0;
+}
+
 .sidebar-section {
   padding: 0 1.25rem;
   margin-bottom: 1.25rem;
@@ -158,6 +213,16 @@ html[data-theme="dark"] {
   .sidebar {
     background-color: #161b22;
     border-right-color: #30363d;
+  }
+
+  .sidebar-collapse-btn {
+    color: #8b949e;
+    border-bottom-color: #30363d;
+  }
+
+  .sidebar-collapse-btn:hover {
+    background-color: #21262d;
+    color: #c9d1d9;
   }
 
   .sidebar::-webkit-scrollbar-thumb {
@@ -356,26 +421,14 @@ html[data-theme="dark"] {
   position: relative;
 }
 
-/* Icon visibility: show sun icon in light mode, moon icon in dark mode */
+/* Icon visibility */
 .theme-toggle-icon-dark { display: none; }
 .theme-toggle-icon-light { display: inline; }
 
 html[data-theme="dark"] .theme-toggle-icon-dark { display: inline; }
 html[data-theme="dark"] .theme-toggle-icon-light { display: none; }
 
-/* ===== Responsive: Tablet ===== */
-@media screen and (max-width: 64em) {
-  .sidebar {
-    width: 220px;
-    min-width: 220px;
-  }
-
-  .main-content {
-    padding: 2rem 2rem;
-  }
-}
-
-/* ===== Responsive: Mobile — Sidebar becomes overlay ===== */
+/* ===== Responsive: Narrow screens — sidebar becomes overlay ===== */
 @media screen and (max-width: 48em) {
   .sidebar-toggle {
     display: flex;
@@ -403,6 +456,18 @@ html[data-theme="dark"] .theme-toggle-icon-light { display: none; }
   .sidebar.open {
     transform: translateX(0);
     box-shadow: 4px 0 16px rgba(0, 0, 0, 0.15);
+  }
+
+  /* On narrow, collapsed means hidden entirely */
+  html.sidebar-collapsed .sidebar {
+    width: 280px;
+    min-width: auto;
+    transform: translateX(-100%);
+    border-right: 1px solid #eff0f1;
+  }
+
+  .sidebar-collapse-btn {
+    display: flex;
   }
 
   .main-content {

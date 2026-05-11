@@ -1,0 +1,142 @@
+---
+---
+
+@import "{{ site.theme }}";
+
+/* ===== Dark Mode Overrides ===== */
+@media (prefers-color-scheme: dark) {
+
+  /* Base */
+  body {
+    background-color: #0d1117;
+    color: #c9d1d9;
+  }
+
+  /* Header */
+  .page-header {
+    background: linear-gradient(135deg, #1a1a3e 0%, #0d3b2e 100%);
+  }
+
+  .project-name {
+    color: #7ee787;
+  }
+
+  .project-tagline {
+    color: #8b949e;
+  }
+
+  /* Headings */
+  .main-content h1,
+  .main-content h2,
+  .main-content h3,
+  .main-content h4,
+  .main-content h5,
+  .main-content h6 {
+    color: #7ee787;
+  }
+
+  .main-content h1::before,
+  .main-content h2::before {
+    color: #30363d;
+  }
+
+  /* Links */
+  .main-content a {
+    color: #58a6ff;
+  }
+
+  .main-content a:hover {
+    color: #79c0ff;
+  }
+
+  /* Code */
+  .main-content code,
+  .main-content pre {
+    background-color: #161b22;
+    border-color: #30363d;
+    color: #c9d1d9;
+  }
+
+  .main-content pre > code {
+    color: #c9d1d9;
+  }
+
+  .main-content .highlight {
+    background-color: #161b22;
+  }
+
+  /* Tables */
+  .main-content table {
+    border-color: #30363d;
+  }
+
+  .main-content table th {
+    background-color: #161b22;
+    color: #7ee787;
+    border-color: #30363d;
+  }
+
+  .main-content table td {
+    border-color: #30363d;
+  }
+
+  .main-content table tr {
+    background-color: #0d1117;
+    border-color: #30363d;
+  }
+
+  .main-content table tr:nth-child(2n) {
+    background-color: #161b22;
+  }
+
+  /* Blockquotes */
+  .main-content blockquote {
+    color: #8b949e;
+    border-left-color: #30363d;
+    background-color: #161b22;
+  }
+
+  /* Horizontal rules */
+  .main-content hr {
+    background-color: #30363d;
+  }
+
+  /* Footer */
+  .site-footer {
+    color: #8b949e;
+  }
+
+  .site-footer-credits {
+    color: #484f58;
+  }
+
+  /* Buttons */
+  .btn {
+    color: #58a6ff;
+    border-color: #30363d;
+    background-color: #21262d;
+  }
+
+  .btn:hover {
+    color: #79c0ff;
+    border-color: #58a6ff;
+  }
+
+  /* Images - slight dimming */
+  img {
+    opacity: 0.9;
+  }
+
+  /* Strong/bold text */
+  strong, b {
+    color: #f0f6fc;
+  }
+
+  /* Keyboard tags */
+  kbd {
+    background-color: #161b22;
+    border-color: #30363d;
+    color: #c9d1d9;
+    box-shadow: inset 0 -1px 0 #30363d;
+  }
+}

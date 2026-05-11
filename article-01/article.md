@@ -9,7 +9,7 @@ next_label: Full Analysis
 
 # How School Groups Are Fueling Parenting Anxiety
 
-**Source:** Daily Pioneer | **Author:** Educator and Counsellor | **Date:** May 11, 2026
+**Source:** [Daily Pioneer](https://dailypioneer.com/news/how-school-groups-are-fueling-parenting-anxiety) | **Author:** Sakshi Sethi (Educator and Counsellor) | **Date:** May 11, 2026
 
 ---
 

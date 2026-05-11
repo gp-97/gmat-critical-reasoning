@@ -16,11 +16,11 @@ Tracking my progress in analyzing arguments using the **Good / True / Happen** f
 | # | Article | Source | Full Analysis | My Response | Evaluation |
 |---|---------|--------|--------------|-------------|------------|
 | 01 | [How School Groups Are Fueling Parenting Anxiety](article-01/article) | Daily Pioneer, May 11 2026 | [Tutor Analysis](article-01/analysis) | [My Response](article-01/response) | [Evaluation](article-01/evaluation) |
-| 02 | [The Insidious Return of Separate Electorates](article-02/article) | The Hindu, May 11 2026 | *Pending* | *Pending* | *Pending* |
-| 03 | [What measures are needed to address Delhi's heat crisis?](article-03/article) | The Hindu, May 11 2026 | *Pending* | *Pending* | *Pending* |
-| 04 | [AI is not killing education](article-04/article) | Indian Express, May 7 2026 | *Pending* | *Pending* | *Pending* |
-| 05 | [Protection for consumers comes at a cost](article-05/article) | Indian Express, May 11 2026 | *Pending* | *Pending* | *Pending* |
-| 06 | [What UP's One District, One Cuisine leaves out](article-06/article) | Indian Express, May 11 2026 | *Pending* | *Pending* | *Pending* |
+| 02 | [The Insidious Return of Separate Electorates](article-02/article) | The Hindu, May 11 2026 | [Tutor Analysis](article-02/analysis) | *Pending* | *Pending* |
+| 03 | [What measures are needed to address Delhi's heat crisis?](article-03/article) | The Hindu, May 11 2026 | [Tutor Analysis](article-03/analysis) | *Pending* | *Pending* |
+| 04 | [AI is not killing education](article-04/article) | Indian Express, May 7 2026 | [Tutor Analysis](article-04/analysis) | *Pending* | *Pending* |
+| 05 | [Protection for consumers comes at a cost](article-05/article) | Indian Express, May 11 2026 | [Tutor Analysis](article-05/analysis) | *Pending* | *Pending* |
+| 06 | [What UP's One District, One Cuisine leaves out](article-06/article) | Indian Express, May 11 2026 | [Tutor Analysis](article-06/analysis) | *Pending* | *Pending* |
 
 ---
 

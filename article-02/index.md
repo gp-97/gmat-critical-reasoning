@@ -16,7 +16,7 @@ next_label: Original Article
 | File | Description |
 |------|-------------|
 | [Article](article) | Original editorial text |
-| Full Analysis | Complete tutor breakdown *(pending)* |
+| [Full Analysis](analysis) | Complete tutor breakdown *(done)* |
 | My Response | My own analysis attempt *(pending)* |
 | Evaluation | Tutor's evaluation of my response *(pending)* |
 

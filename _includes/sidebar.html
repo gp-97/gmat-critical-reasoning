@@ -1,0 +1,20 @@
+<nav class="sidebar-nav">
+  <div class="sidebar-section">
+    <h3 class="sidebar-heading"><a href="{{ '/' | relative_url }}">Home</a></h3>
+  </div>
+
+  <div class="sidebar-section">
+    <h3 class="sidebar-heading">Article 01</h3>
+    <ul class="sidebar-links">
+      <li><a href="{{ '/article-01/article' | relative_url }}">Original Article</a></li>
+      <li><a href="{{ '/article-01/analysis' | relative_url }}">Full Analysis</a></li>
+      <li><a href="{{ '/article-01/response' | relative_url }}">My Response</a></li>
+      <li><a href="{{ '/article-01/evaluation' | relative_url }}">Evaluation</a></li>
+    </ul>
+  </div>
+
+  <div class="sidebar-section" id="page-toc-section" style="display:none;">
+    <h3 class="sidebar-heading">On This Page</h3>
+    <ul class="sidebar-links" id="page-toc"></ul>
+  </div>
+</nav>

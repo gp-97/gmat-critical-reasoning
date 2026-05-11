@@ -3,46 +3,192 @@
 
 @import "{{ site.theme }}";
 
-/* ===== Theme Toggle Button ===== */
-.theme-toggle {
+/* Smooth theme transitions */
+body, .page-header, .main-content, .site-footer, a, code, pre, table, blockquote, .btn, kbd, .sidebar, .sidebar a {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* ===== Layout: Sidebar + Content Wrapper ===== */
+.wrapper {
+  display: flex;
+  max-width: 90rem;
+  margin: 0 auto;
+  position: relative;
+}
+
+.main-content {
+  flex: 1;
+  min-width: 0;
+  word-wrap: break-word;
+  padding: 2rem 3rem;
+  max-width: none;
+  margin: 0;
+}
+
+/* ===== Sidebar ===== */
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  border-right: 1px solid #eff0f1;
+  background-color: #fafbfc;
+  padding: 1.5rem 0;
+  z-index: 5;
+  scrollbar-width: thin;
+}
+
+.sidebar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background-color: #d1d5db;
+  border-radius: 2px;
+}
+
+/* Sidebar Toggle Button (mobile) */
+.sidebar-toggle {
+  display: none;
   position: absolute;
   top: 1rem;
-  right: 1rem;
+  left: 1rem;
   width: 36px;
   height: 36px;
-  border-radius: 50%;
+  border-radius: 6px;
   border: 1px solid rgba(255, 255, 255, 0.3);
   background: rgba(255, 255, 255, 0.1);
   cursor: pointer;
-  font-size: 16px;
+  font-size: 18px;
   line-height: 1;
+  color: #fff;
   padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background 0.2s, border-color 0.2s;
-  z-index: 10;
+  z-index: 20;
   backdrop-filter: blur(4px);
 }
 
-.theme-toggle:hover {
+.sidebar-toggle:hover {
   background: rgba(255, 255, 255, 0.2);
   border-color: rgba(255, 255, 255, 0.5);
 }
 
-.page-header {
-  position: relative;
+/* Sidebar overlay (mobile) */
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 4;
 }
 
-/* Icon visibility: show sun icon in light mode, moon icon in dark mode */
-.theme-toggle-icon-dark { display: none; }
-.theme-toggle-icon-light { display: inline; }
+.sidebar-overlay.visible {
+  display: block;
+}
 
-html[data-theme="dark"] .theme-toggle-icon-dark { display: inline; }
-html[data-theme="dark"] .theme-toggle-icon-light { display: none; }
+/* ===== Sidebar Navigation ===== */
+.sidebar-section {
+  padding: 0 1.25rem;
+  margin-bottom: 1.25rem;
+}
 
-/* ===== Dark Mode Overrides ===== */
+.sidebar-heading {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #656d76;
+  margin: 0 0 0.5rem 0;
+  padding: 0;
+}
+
+.sidebar-heading a {
+  color: #656d76;
+  text-decoration: none;
+}
+
+.sidebar-heading a:hover {
+  color: #1e6bb8;
+}
+
+.sidebar-links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.sidebar-links li {
+  margin: 0;
+  padding: 0;
+}
+
+.sidebar-links a {
+  display: block;
+  padding: 0.35rem 0.5rem;
+  font-size: 0.875rem;
+  color: #24292f;
+  text-decoration: none;
+  border-radius: 4px;
+  transition: background-color 0.15s, color 0.15s;
+}
+
+.sidebar-links a:hover {
+  background-color: #eaeef2;
+  color: #1e6bb8;
+}
+
+.sidebar-links a.toc-h3 {
+  padding-left: 1.25rem;
+  font-size: 0.8rem;
+}
+
+/* Active link highlight based on current URL */
+.sidebar-links a.active {
+  background-color: #ddf4ff;
+  color: #0969da;
+  font-weight: 600;
+}
+
+/* ===== Dark Mode — Sidebar ===== */
 html[data-theme="dark"] {
+  .sidebar {
+    background-color: #161b22;
+    border-right-color: #30363d;
+  }
+
+  .sidebar::-webkit-scrollbar-thumb {
+    background-color: #30363d;
+  }
+
+  .sidebar-heading {
+    color: #8b949e;
+  }
+
+  .sidebar-heading a {
+    color: #8b949e;
+  }
+
+  .sidebar-heading a:hover {
+    color: #58a6ff;
+  }
+
+  .sidebar-links a {
+    color: #c9d1d9;
+  }
+
+  .sidebar-links a:hover {
+    background-color: #21262d;
+    color: #58a6ff;
+  }
+
+  .sidebar-links a.active {
+    background-color: #0d419d;
+    color: #79c0ff;
+  }
 
   /* Base */
   body {
@@ -176,5 +322,94 @@ html[data-theme="dark"] {
     border-color: #30363d;
     color: #c9d1d9;
     box-shadow: inset 0 -1px 0 #30363d;
+  }
+}
+
+/* ===== Theme Toggle Button ===== */
+.theme-toggle {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, border-color 0.2s;
+  z-index: 10;
+  backdrop-filter: blur(4px);
+}
+
+.theme-toggle:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.page-header {
+  position: relative;
+}
+
+/* Icon visibility: show sun icon in light mode, moon icon in dark mode */
+.theme-toggle-icon-dark { display: none; }
+.theme-toggle-icon-light { display: inline; }
+
+html[data-theme="dark"] .theme-toggle-icon-dark { display: inline; }
+html[data-theme="dark"] .theme-toggle-icon-light { display: none; }
+
+/* ===== Responsive: Tablet ===== */
+@media screen and (max-width: 64em) {
+  .sidebar {
+    width: 220px;
+    min-width: 220px;
+  }
+
+  .main-content {
+    padding: 2rem 2rem;
+  }
+}
+
+/* ===== Responsive: Mobile — Sidebar becomes overlay ===== */
+@media screen and (max-width: 48em) {
+  .sidebar-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .wrapper {
+    display: block;
+  }
+
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 280px;
+    min-width: auto;
+    height: 100vh;
+    z-index: 15;
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+    box-shadow: none;
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+    box-shadow: 4px 0 16px rgba(0, 0, 0, 0.15);
+  }
+
+  .main-content {
+    padding: 1.5rem 1rem;
+  }
+
+  body.sidebar-open {
+    overflow: hidden;
   }
 }

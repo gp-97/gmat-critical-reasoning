@@ -42,6 +42,7 @@
         {% include sidebar.html %}
       </aside>
 
+      <button class="sidebar-expand-btn" id="sidebar-expand-btn" aria-label="Expand sidebar" title="Expand sidebar">▶</button>
       <div class="sidebar-overlay" id="sidebar-overlay"></div>
 
       <main class="main-content" role="main">
@@ -124,6 +125,14 @@
           collapseBtn.addEventListener('click', function(e) {
             e.stopPropagation();
             toggleCollapse();
+          });
+        }
+
+        // Floating expand button (visible when sidebar collapsed)
+        var expandBtn = document.getElementById('sidebar-expand-btn');
+        if (expandBtn) {
+          expandBtn.addEventListener('click', function() {
+            expand();
           });
         }
 

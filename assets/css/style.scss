@@ -80,6 +80,39 @@ body, .page-header, .main-content, .site-footer, a, code, pre, table, blockquote
   transition: transform 0.25s ease;
 }
 
+/* ===== Floating Expand Button (visible when sidebar collapsed) ===== */
+.sidebar-expand-btn {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 56px;
+  border: 1px solid #d0d7de;
+  border-left: none;
+  border-radius: 0 6px 6px 0;
+  background: #ffffff;
+  cursor: pointer;
+  font-size: 11px;
+  color: #656d76;
+  padding: 0;
+  z-index: 6;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.08);
+  transition: background-color 0.15s, color 0.15s, opacity 0.25s ease;
+}
+
+.sidebar-expand-btn:hover {
+  background-color: #f3f4f6;
+  color: #24292f;
+}
+
+html.sidebar-collapsed .sidebar-expand-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 /* ===== Collapsed Sidebar ===== */
 html.sidebar-collapsed .sidebar {
   width: 0;
@@ -222,6 +255,18 @@ html[data-theme="dark"] {
 
   .sidebar-collapse-btn:hover {
     background-color: #21262d;
+    color: #c9d1d9;
+  }
+
+  .sidebar-expand-btn {
+    background-color: #21262d;
+    border-color: #30363d;
+    color: #8b949e;
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.3);
+  }
+
+  .sidebar-expand-btn:hover {
+    background-color: #30363d;
     color: #c9d1d9;
   }
 

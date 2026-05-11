@@ -1,3 +1,10 @@
+---
+title: GMAT Critical Reasoning Practice
+description: Analyzing editorials and arguments using the Critical Reasoning framework
+next: /cheatsheet
+next_label: Cheat Sheet
+---
+
 # GMAT Critical Reasoning Practice
 
 Tracking my progress in analyzing arguments using the **Good / True / Happen** framework.

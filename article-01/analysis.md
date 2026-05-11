@@ -1,3 +1,12 @@
+---
+title: Full Analysis
+description: Complete Critical Reasoning breakdown — Conclusion, Premises, Assumptions, Gap Test, Weakening, Vulnerability Ranking, Failure Modes
+prev: /article-01/article
+prev_label: Original Article
+next: /article-01/response
+next_label: My Response
+---
+
 Complete analytical breakdown using the Critical Reasoning framework.
 
 ---

@@ -1,10 +1,14 @@
-<button class="sidebar-collapse-btn" id="sidebar-collapse-btn" aria-label="Collapse sidebar" title="Collapse sidebar">
-  <span class="collapse-icon">◀</span>
-</button>
-
 <nav class="sidebar-nav">
   <div class="sidebar-section">
     <h3 class="sidebar-heading"><a href="{{ '/' | relative_url }}">Home</a></h3>
+  </div>
+
+  <div class="sidebar-section">
+    <h3 class="sidebar-heading">Reference</h3>
+    <ul class="sidebar-links">
+      <li><a href="{{ '/cheatsheet' | relative_url }}">📋 Cheat Sheet</a></li>
+      <li><a href="{{ '/progress' | relative_url }}">📊 Progress</a></li>
+    </ul>
   </div>
 
   <div class="sidebar-section">

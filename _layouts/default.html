@@ -7,7 +7,7 @@
 
 {% seo %}
     <link rel="stylesheet" href="{{ '/assets/css/style.css?v=' | append: site.github.build_revision | relative_url }}">
-    <!-- Apply stored or system theme + sidebar state immediately to prevent flash -->
+    <!-- Apply stored preferences immediately to prevent flash -->
     <script>
       (function() {
         var saved = localStorage.getItem('theme');
@@ -23,10 +23,17 @@
     </script>
   </head>
   <body>
+    <!-- Reading Progress Bar -->
+    <div class="progress-bar" id="progress-bar"></div>
+
     <div class="page-header" role="banner">
       <button id="sidebar-toggle" class="sidebar-toggle" aria-label="Toggle sidebar" title="Toggle sidebar">☰</button>
       <h1 class="project-name">{{ page.title | default: site.title | default: site.github.repository_name }}</h1>
       <h2 class="project-tagline">{{ page.description | default: site.description | default: site.github.project_tagline }}</h2>
+
+      <!-- Reading time -->
+      <span class="reading-time" id="reading-time"></span>
+
       {% if site.show_downloads %}
         <a href="{{ site.github.zip_url }}" class="btn">Download .zip</a>
         <a href="{{ site.github.tar_url }}" class="btn">Download .tar.gz</a>
@@ -48,6 +55,28 @@
       <main class="main-content" role="main">
         {{ content }}
 
+        <!-- Prev / Next Navigation -->
+        {% if page.prev or page.next %}
+        <nav class="page-nav" aria-label="Adjacent pages">
+          {% if page.prev %}
+          <a href="{{ page.prev | relative_url }}" class="page-nav-link page-nav-prev">
+            <span class="page-nav-arrow">←</span>
+            <span class="page-nav-label">{{ page.prev_label | default: "Previous" }}</span>
+          </a>
+          {% else %}
+          <span class="page-nav-link page-nav-prev page-nav-empty"></span>
+          {% endif %}
+          {% if page.next %}
+          <a href="{{ page.next | relative_url }}" class="page-nav-link page-nav-next">
+            <span class="page-nav-label">{{ page.next_label | default: "Next" }}</span>
+            <span class="page-nav-arrow">→</span>
+          </a>
+          {% else %}
+          <span class="page-nav-link page-nav-next page-nav-empty"></span>
+          {% endif %}
+        </nav>
+        {% endif %}
+
         <footer class="site-footer">
           {% if site.github.is_project_page %}
             <span class="site-footer-owner"><a href="{{ site.github.repository_url }}">{{ site.github.repository_name }}</a> is maintained by <a href="{{ site.github.owner_url }}">{{ site.github.owner_name }}</a>.</span>
@@ -57,24 +86,25 @@
       </main>
     </div>
 
+    <!-- Scroll-to-top button -->
+    <button class="scroll-top-btn" id="scroll-top-btn" aria-label="Scroll to top" title="Back to top">↑</button>
+
     <script>
-      // Theme toggle
+      // ===== Theme Toggle =====
       (function() {
         var toggle = document.getElementById('theme-toggle');
         var html = document.documentElement;
-
         function setTheme(theme) {
           html.setAttribute('data-theme', theme);
           localStorage.setItem('theme', theme);
         }
-
         toggle.addEventListener('click', function() {
           var current = html.getAttribute('data-theme');
           setTheme(current === 'dark' ? 'light' : 'dark');
         });
       })();
 
-      // Unified sidebar logic: collapse (all sizes) + overlay (narrow screens)
+      // ===== Sidebar Logic =====
       (function() {
         var html = document.documentElement;
         var body = document.body;
@@ -82,111 +112,182 @@
         var overlay = document.getElementById('sidebar-overlay');
         var hamburger = document.getElementById('sidebar-toggle');
         var collapseBtn = document.getElementById('sidebar-collapse-btn');
+        var expandBtn = document.getElementById('sidebar-expand-btn');
         var isNarrow = function() { return window.innerWidth <= 768; };
 
         function collapse() {
           html.classList.add('sidebar-collapsed');
           localStorage.setItem('sidebar-collapsed', 'true');
         }
-
         function expand() {
           html.classList.remove('sidebar-collapsed');
           localStorage.setItem('sidebar-collapsed', 'false');
-          // On narrow screens, also open as overlay
           if (isNarrow()) {
             sidebar.classList.add('open');
             overlay.classList.add('visible');
             body.classList.add('sidebar-open');
           }
         }
-
         function toggleCollapse() {
-          if (html.classList.contains('sidebar-collapsed')) {
-            expand();
-          } else {
-            collapse();
-          }
+          html.classList.contains('sidebar-collapsed') ? expand() : collapse();
         }
-
         function closeOverlay() {
           sidebar.classList.remove('open');
           overlay.classList.remove('visible');
           body.classList.remove('sidebar-open');
         }
-
         function openOverlay() {
           sidebar.classList.add('open');
           overlay.classList.add('visible');
           body.classList.add('sidebar-open');
         }
 
-        // Collapse button on sidebar
-        if (collapseBtn) {
-          collapseBtn.addEventListener('click', function(e) {
-            e.stopPropagation();
-            toggleCollapse();
-          });
-        }
+        if (collapseBtn) collapseBtn.addEventListener('click', function(e) { e.stopPropagation(); toggleCollapse(); });
+        if (expandBtn) expandBtn.addEventListener('click', function() { expand(); });
 
-        // Floating expand button (visible when sidebar collapsed)
-        var expandBtn = document.getElementById('sidebar-expand-btn');
-        if (expandBtn) {
-          expandBtn.addEventListener('click', function() {
-            expand();
-          });
-        }
-
-        // Hamburger: on narrow screens toggles overlay; on wide screens toggles collapse
         hamburger.addEventListener('click', function() {
           if (isNarrow()) {
-            if (sidebar.classList.contains('open')) {
-              closeOverlay();
-            } else {
-              // Expand from collapsed state before opening overlay
-              if (html.classList.contains('sidebar-collapsed')) {
-                expand();
-              } else {
-                openOverlay();
-              }
-            }
+            sidebar.classList.contains('open') ? closeOverlay() : (html.classList.contains('sidebar-collapsed') ? expand() : openOverlay());
           } else {
             toggleCollapse();
           }
         });
 
         overlay.addEventListener('click', closeOverlay);
+        document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeOverlay(); });
+        sidebar.addEventListener('click', function(e) { if (e.target.tagName === 'A' && isNarrow()) closeOverlay(); });
+        window.addEventListener('resize', function() { if (!isNarrow()) closeOverlay(); });
+      })();
 
-        document.addEventListener('keydown', function(e) {
-          if (e.key === 'Escape') closeOverlay();
+      // ===== Reading Progress Bar =====
+      (function() {
+        var bar = document.getElementById('progress-bar');
+        window.addEventListener('scroll', function() {
+          var scrollTop = window.scrollY || document.documentElement.scrollTop;
+          var docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+          var pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+          bar.style.width = Math.min(pct, 100) + '%';
         });
+      })();
 
-        // Close overlay when a link is clicked on narrow screens
-        sidebar.addEventListener('click', function(e) {
-          if (e.target.tagName === 'A' && isNarrow()) {
-            closeOverlay();
+      // ===== Scroll-to-top Button =====
+      (function() {
+        var btn = document.getElementById('scroll-top-btn');
+        window.addEventListener('scroll', function() {
+          btn.style.display = (window.scrollY > 400) ? 'flex' : 'none';
+        });
+        btn.addEventListener('click', function() {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      })();
+
+      // ===== Reading Time =====
+      (function() {
+        var el = document.getElementById('reading-time');
+        if (!el) return;
+        var text = document.querySelector('.main-content') ? document.querySelector('.main-content').textContent : '';
+        var words = text.trim().split(/\s+/).length;
+        var mins = Math.max(1, Math.ceil(words / 200));
+        el.textContent = mins + ' min read';
+      })();
+
+      // ===== Collapsible Sections (Accordion) =====
+      (function() {
+        var sections = document.querySelectorAll('.main-content .collapsible-section');
+        if (sections.length === 0) {
+          // Auto-detect: wrap each h2 + its content into collapsible sections
+          var headings = document.querySelectorAll('.main-content h2');
+          if (headings.length >= 3) {
+            headings.forEach(function(h2) {
+              var wrapper = document.createElement('div');
+              wrapper.className = 'collapsible-section';
+              h2.parentNode.insertBefore(wrapper, h2);
+              var content = document.createElement('div');
+              content.className = 'collapsible-content';
+              wrapper.appendChild(h2);
+              wrapper.appendChild(content);
+              var next = wrapper.nextElementSibling;
+              while (next && next.tagName !== 'H2') {
+                var toMove = next;
+                next = next.nextElementSibling;
+                content.appendChild(toMove);
+              }
+              // Add toggle indicator
+              var arrow = document.createElement('span');
+              arrow.className = 'collapsible-arrow';
+              arrow.textContent = '▾';
+              h2.appendChild(arrow);
+              h2.classList.add('collapsible-toggle');
+              h2.addEventListener('click', function() {
+                wrapper.classList.toggle('collapsed');
+              });
+            });
+          }
+        }
+      })();
+
+      // ===== Copy Buttons =====
+      (function() {
+        // Add copy buttons to tables following h3 elements that contain "Key Lesson"
+        document.querySelectorAll('.main-content h3, .main-content h2').forEach(function(heading) {
+          if (/key lesson|summary|takeaway/i.test(heading.textContent)) {
+            var nextTable = heading.nextElementSibling;
+            while (nextTable && nextTable.tagName !== 'TABLE') {
+              nextTable = nextTable.nextElementSibling;
+            }
+            if (nextTable) {
+              var btn = document.createElement('button');
+              btn.className = 'copy-btn';
+              btn.textContent = '📋 Copy';
+              btn.title = 'Copy this table';
+              btn.addEventListener('click', function() {
+                var text = '';
+                var rows = nextTable.querySelectorAll('tr');
+                rows.forEach(function(row) {
+                  var cells = row.querySelectorAll('th, td');
+                  var rowText = [];
+                  cells.forEach(function(cell) { rowText.push(cell.textContent.trim()); });
+                  text += rowText.join(' | ') + '\n';
+                });
+                navigator.clipboard.writeText(text.trim()).then(function() {
+                  btn.textContent = '✓ Copied';
+                  setTimeout(function() { btn.textContent = '📋 Copy'; }, 2000);
+                });
+              });
+              heading.insertBefore(btn, heading.firstChild);
+            }
           }
         });
 
-        // On window resize, handle transition between narrow/wide
-        window.addEventListener('resize', function() {
-          if (!isNarrow()) {
-            closeOverlay();
+        // Add copy buttons to blockquotes containing "Key" or "Takeaway"
+        document.querySelectorAll('.main-content blockquote').forEach(function(bq) {
+          if (/key|takeaway|summary/i.test(bq.textContent.substring(0, 30))) {
+            var btn = document.createElement('button');
+            btn.className = 'copy-btn copy-btn-block';
+            btn.textContent = '📋';
+            btn.title = 'Copy';
+            btn.addEventListener('click', function() {
+              navigator.clipboard.writeText(bq.textContent.trim()).then(function() {
+                btn.textContent = '✓';
+                setTimeout(function() { btn.textContent = '📋'; }, 2000);
+              });
+            });
+            bq.style.position = 'relative';
+            bq.insertBefore(btn, bq.firstChild);
           }
         });
       })();
 
-      // Generate on-page table of contents
+      // ===== Page TOC =====
       (function() {
         var toc = document.getElementById('page-toc');
         var tocSection = document.getElementById('page-toc-section');
+        if (!toc || !tocSection) return;
         var headings = document.querySelectorAll('.main-content h2, .main-content h3');
-
         if (headings.length > 1) {
           headings.forEach(function(heading) {
             if (!heading.id) {
-              heading.id = heading.textContent.toLowerCase()
-                .replace(/[^a-z0-9]+/g, '-')
-                .replace(/(^-|-$)/g, '');
+              heading.id = heading.textContent.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
             }
             var li = document.createElement('li');
             var a = document.createElement('a');
@@ -200,11 +301,10 @@
         }
       })();
 
-      // Highlight active link in sidebar based on current URL
+      // ===== Active Sidebar Link =====
       (function() {
         var currentPath = window.location.pathname.replace(/\/$/, '') || '/';
-        var sidebarLinks = document.querySelectorAll('.sidebar-links a');
-        sidebarLinks.forEach(function(link) {
+        document.querySelectorAll('.sidebar-links a').forEach(function(link) {
           var linkPath = link.getAttribute('href').replace(/\/$/, '') || '/';
           if (currentPath === linkPath || currentPath.endsWith(linkPath)) {
             link.classList.add('active');

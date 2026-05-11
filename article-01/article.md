@@ -1,3 +1,12 @@
+---
+title: Original Article
+description: How School Groups Are Fueling Parenting Anxiety
+prev: /article-01/
+prev_label: Article 01
+next: /article-01/analysis
+next_label: Full Analysis
+---
+
 # How School Groups Are Fueling Parenting Anxiety
 
 **Source:** Daily Pioneer | **Author:** Educator and Counsellor | **Date:** May 11, 2026

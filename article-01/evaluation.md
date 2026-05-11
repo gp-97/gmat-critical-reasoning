@@ -1,3 +1,10 @@
+---
+title: Evaluation
+description: Tutor evaluation and side-by-side correction of conclusion and premises
+prev: /article-01/response
+prev_label: My Response
+---
+
 # Evaluation — Conclusion & Premise Identification
 
 **Article:** How School Groups Are Fueling Parenting Anxiety

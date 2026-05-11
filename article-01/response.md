@@ -1,3 +1,12 @@
+---
+title: My Response
+description: Conclusion and premises identification — first attempt
+prev: /article-01/analysis
+prev_label: Full Analysis
+next: /article-01/evaluation
+next_label: Evaluation
+---
+
 # My Response — Conclusion & Premises
 
 **Article:** How School Groups Are Fueling Parenting Anxiety
